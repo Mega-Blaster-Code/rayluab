@@ -1,3 +1,6 @@
+#ifndef RAYLUAB_UDATA_H
+#define RAYLUAB_UDATA_H
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +13,8 @@
 
 #define WINDOWHANDLER_USERDATA 0
 #define IMAGE_USERDATA 1
+#define WAVE_USERDATA 2
+#define SOUND_USERDATA 3
 
 typedef struct {
     int type;
@@ -18,31 +23,11 @@ typedef struct {
 
 #define UNI_MT "UNI_UD"
 
-static void create_mt(lua_State *L){
-    if(luaL_newmetatable(L, UNI_MT)){
+void rll_createMT(lua_State *L);
 
-    }
-    lua_pop(L, 1);
-}
+uni_userdata *rll_newuserdata(lua_State *L, int type, void *data, size_t data_size);
+uni_userdata *rll_newSelfUserdata(lua_State *L, int type, void *data);
+uni_userdata *rll_getuserdata(lua_State *L, int idx, int type);
+void *rll_getuserdata_data(lua_State *L, int idx, int type);
 
-static uni_userdata *rll_newuserdata(lua_State *L, int type, void *data){
-    uni_userdata *ud = (uni_userdata *)lua_newuserdata(L, sizeof(uni_userdata));
-
-    ud->type = type;
-    ud->data = data;
-
-    luaL_getmetatable(L, UNI_MT);
-    lua_setmetatable(L, -2);
-
-    return ud;
-}
-
-static uni_userdata *rll_getuserdata(lua_State *L, int idx, int type){
-    uni_userdata *ud = (uni_userdata *)luaL_checkudata(L, idx, UNI_MT);
-
-    if(ud->type != type){
-        luaL_error(L, "bad userdata expected [%d] got [%d]", type, ud->type);
-    }
-
-    return ud;
-}
+#endif //RAYLUAB_UDATA_H

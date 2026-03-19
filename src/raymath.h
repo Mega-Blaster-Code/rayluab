@@ -23,8 +23,8 @@
 *           If not defined, the library is in header only mode and can be included in other headers
 *           or source files without problems. But only ONE file should hold the implementation.
 *
-*       #define RAYMATH_STATIC_INLINE
-*           Define static inline functions code, so #include header suffices for use.
+*       #define RAYMATH__INLINE
+*           Define  inline functions code, so #include header suffices for use.
 *           This may use up lots of memory.
 *
 *       #define RAYMATH_DISABLE_CPP_OPERATORS
@@ -54,8 +54,8 @@
 #ifndef RAYMATH_H
 #define RAYMATH_H
 
-#if defined(RAYMATH_IMPLEMENTATION) && defined(RAYMATH_STATIC_INLINE)
-    #error "Specifying both RAYMATH_IMPLEMENTATION and RAYMATH_STATIC_INLINE is contradictory"
+#if defined(RAYMATH_IMPLEMENTATION) && defined(RAYMATH__INLINE)
+    #error "Specifying both RAYMATH_IMPLEMENTATION and RAYMATH__INLINE is contradictory"
 #endif
 
 // Function specifiers definition
@@ -69,11 +69,11 @@
     #else
         #define RMAPI extern inline // Provide external definition
     #endif
-#elif defined(RAYMATH_STATIC_INLINE)
-    #define RMAPI static inline // Functions may be inlined, no external out-of-line definition
+#elif defined(RAYMATH__INLINE)
+    #define RMAPI  inline // Functions may be inlined, no external out-of-line definition
 #else
     #if defined(__TINYC__)
-        #define RMAPI static inline // plain inline not supported by tinycc (See issue #435)
+        #define RMAPI  inline // plain inline not supported by tinycc (See issue #435)
     #else
         #define RMAPI inline        // Functions may be inlined or external definition used
     #endif
@@ -2594,10 +2594,10 @@ RMAPI void MatrixDecompose(Matrix mat, Vector3 *translation, Quaternion *rotatio
 //-------------------------------------------------------------------------------
 
 // Vector2 operators
-static constexpr Vector2 Vector2Zeros = { 0, 0 };
-static constexpr Vector2 Vector2Ones = { 1, 1 };
-static constexpr Vector2 Vector2UnitX = { 1, 0 };
-static constexpr Vector2 Vector2UnitY = { 0, 1 };
+ constexpr Vector2 Vector2Zeros = { 0, 0 };
+ constexpr Vector2 Vector2Ones = { 1, 1 };
+ constexpr Vector2 Vector2UnitX = { 1, 0 };
+ constexpr Vector2 Vector2UnitY = { 0, 1 };
 
 inline Vector2 operator + (const Vector2& lhs, const Vector2& rhs)
 {
@@ -2687,11 +2687,11 @@ inline bool operator != (const Vector2& lhs, const Vector2& rhs)
 }
 
 // Vector3 operators
-static constexpr Vector3 Vector3Zeros = { 0, 0, 0 };
-static constexpr Vector3 Vector3Ones = { 1, 1, 1 };
-static constexpr Vector3 Vector3UnitX = { 1, 0, 0 };
-static constexpr Vector3 Vector3UnitY = { 0, 1, 0 };
-static constexpr Vector3 Vector3UnitZ = { 0, 0, 1 };
+ constexpr Vector3 Vector3Zeros = { 0, 0, 0 };
+ constexpr Vector3 Vector3Ones = { 1, 1, 1 };
+ constexpr Vector3 Vector3UnitX = { 1, 0, 0 };
+ constexpr Vector3 Vector3UnitY = { 0, 1, 0 };
+ constexpr Vector3 Vector3UnitZ = { 0, 0, 1 };
 
 inline Vector3 operator + (const Vector3& lhs, const Vector3& rhs)
 {
@@ -2781,12 +2781,12 @@ inline bool operator != (const Vector3& lhs, const Vector3& rhs)
 }
 
 // Vector4 operators
-static constexpr Vector4 Vector4Zeros = { 0, 0, 0, 0 };
-static constexpr Vector4 Vector4Ones = { 1, 1, 1, 1 };
-static constexpr Vector4 Vector4UnitX = { 1, 0, 0, 0 };
-static constexpr Vector4 Vector4UnitY = { 0, 1, 0, 0 };
-static constexpr Vector4 Vector4UnitZ = { 0, 0, 1, 0 };
-static constexpr Vector4 Vector4UnitW = { 0, 0, 0, 1 };
+ constexpr Vector4 Vector4Zeros = { 0, 0, 0, 0 };
+ constexpr Vector4 Vector4Ones = { 1, 1, 1, 1 };
+ constexpr Vector4 Vector4UnitX = { 1, 0, 0, 0 };
+ constexpr Vector4 Vector4UnitY = { 0, 1, 0, 0 };
+ constexpr Vector4 Vector4UnitZ = { 0, 0, 1, 0 };
+ constexpr Vector4 Vector4UnitW = { 0, 0, 0, 1 };
 
 inline Vector4 operator + (const Vector4& lhs, const Vector4& rhs)
 {
@@ -2865,9 +2865,9 @@ inline bool operator != (const Vector4& lhs, const Vector4& rhs)
 }
 
 // Quaternion operators
-static constexpr Quaternion QuaternionZeros = { 0, 0, 0, 0 };
-static constexpr Quaternion QuaternionOnes = { 1, 1, 1, 1 };
-static constexpr Quaternion QuaternionUnitX = { 0, 0, 0, 1 };
+ constexpr Quaternion QuaternionZeros = { 0, 0, 0, 0 };
+ constexpr Quaternion QuaternionOnes = { 1, 1, 1, 1 };
+ constexpr Quaternion QuaternionUnitX = { 0, 0, 0, 1 };
 
 inline Quaternion operator + (const Quaternion& lhs, const float& rhs)
 {

@@ -14,7 +14,7 @@ OBJ := $(patsubst %.c,$(OBJ_PATH)/%.o,$(notdir $(SRC)))
 
 TARGET = rayluab.dll
 
-all: $(OBJ_PATH) $(TARGET) run
+all: clean $(OBJ_PATH) $(TARGET) run
 
 $(OBJ_PATH):
 	@mkdir -p $(OBJ_PATH)
@@ -29,4 +29,4 @@ run:
 	@$(LUA) main.lua
 
 clean:
-	rm -rf $(OBJ_PATH)/*.o $(TARGET)
+	@rm -rf $(OBJ_PATH)/*.o $(TARGET)

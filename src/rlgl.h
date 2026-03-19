@@ -278,9 +278,9 @@
 #define RL_STREAM_DRAW                          0x88E0      // GL_STREAM_DRAW
 #define RL_STREAM_READ                          0x88E1      // GL_STREAM_READ
 #define RL_STREAM_COPY                          0x88E2      // GL_STREAM_COPY
-#define RL_STATIC_DRAW                          0x88E4      // GL_STATIC_DRAW
-#define RL_STATIC_READ                          0x88E5      // GL_STATIC_READ
-#define RL_STATIC_COPY                          0x88E6      // GL_STATIC_COPY
+#define RL__DRAW                          0x88E4      // GL__DRAW
+#define RL__READ                          0x88E5      // GL__READ
+#define RL__COPY                          0x88E6      // GL__COPY
 #define RL_DYNAMIC_DRAW                         0x88E8      // GL_DYNAMIC_DRAW
 #define RL_DYNAMIC_READ                         0x88E9      // GL_DYNAMIC_READ
 #define RL_DYNAMIC_COPY                         0x88EA      // GL_DYNAMIC_COPY
@@ -1114,48 +1114,48 @@ typedef void *(*rlglLoadProc)(const char *name);   // OpenGL extension functions
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-static double rlCullDistanceNear = RL_CULL_DISTANCE_NEAR;
-static double rlCullDistanceFar = RL_CULL_DISTANCE_FAR;
+ double rlCullDistanceNear = RL_CULL_DISTANCE_NEAR;
+ double rlCullDistanceFar = RL_CULL_DISTANCE_FAR;
 
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
-static rlglData RLGL = { 0 };
+ rlglData RLGL = { 0 };
 #endif  // GRAPHICS_API_OPENGL_33 || GRAPHICS_API_OPENGL_ES2
 
 #if defined(GRAPHICS_API_OPENGL_ES2) && !defined(GRAPHICS_API_OPENGL_ES3)
 // NOTE: VAO functionality is exposed through extensions (OES)
-static PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
-static PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
-static PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
+ PFNGLGENVERTEXARRAYSOESPROC glGenVertexArrays = NULL;
+ PFNGLBINDVERTEXARRAYOESPROC glBindVertexArray = NULL;
+ PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArrays = NULL;
 
 // NOTE: Instancing functionality could also be available through extension
-static PFNGLDRAWARRAYSINSTANCEDEXTPROC glDrawArraysInstanced = NULL;
-static PFNGLDRAWELEMENTSINSTANCEDEXTPROC glDrawElementsInstanced = NULL;
-static PFNGLVERTEXATTRIBDIVISOREXTPROC glVertexAttribDivisor = NULL;
+ PFNGLDRAWARRAYSINSTANCEDEXTPROC glDrawArraysInstanced = NULL;
+ PFNGLDRAWELEMENTSINSTANCEDEXTPROC glDrawElementsInstanced = NULL;
+ PFNGLVERTEXATTRIBDIVISOREXTPROC glVertexAttribDivisor = NULL;
 #endif
 
 //----------------------------------------------------------------------------------
 // Module specific Functions Declaration
 //----------------------------------------------------------------------------------
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
-static void rlLoadShaderDefault(void);      // Load default shader
-static void rlUnloadShaderDefault(void);    // Unload default shader
+ void rlLoadShaderDefault(void);      // Load default shader
+ void rlUnloadShaderDefault(void);    // Unload default shader
 #if defined(RLGL_SHOW_GL_DETAILS_INFO)
-static const char *rlGetCompressedFormatName(int format); // Get compressed format official GL identifier name
+ const char *rlGetCompressedFormatName(int format); // Get compressed format official GL identifier name
 #endif  // RLGL_SHOW_GL_DETAILS_INFO
 #endif  // GRAPHICS_API_OPENGL_33 || GRAPHICS_API_OPENGL_ES2
 
-static int rlGetPixelDataSize(int width, int height, int format);   // Get pixel data size in bytes (image or texture)
+int rlGetPixelDataSize(int width, int height, int format);   // Get pixel data size in bytes (image or texture)
 
 // Auxiliar matrix math functions
 typedef struct rl_float16 {
     float v[16];
 } rl_float16;
-static rl_float16 rlMatrixToFloatV(Matrix mat);             // Get float array of matrix data
+ rl_float16 rlMatrixToFloatV(Matrix mat);             // Get float array of matrix data
 #define rlMatrixToFloat(mat) (rlMatrixToFloatV(mat).v)      // Get float vector for Matrix
-static Matrix rlMatrixIdentity(void);                       // Get identity matrix
-static Matrix rlMatrixMultiply(Matrix left, Matrix right);  // Multiply two matrices
-static Matrix rlMatrixTranspose(Matrix mat);                // Transposes provided matrix
-static Matrix rlMatrixInvert(Matrix mat);                   // Invert provided matrix
+ Matrix rlMatrixIdentity(void);                       // Get identity matrix
+ Matrix rlMatrixMultiply(Matrix left, Matrix right);  // Multiply two matrices
+ Matrix rlMatrixTranspose(Matrix mat);                // Transposes provided matrix
+ Matrix rlMatrixInvert(Matrix mat);                   // Invert provided matrix
 
 //----------------------------------------------------------------------------------
 // Module Functions Definition - Matrix operations
@@ -2173,7 +2173,7 @@ void rlSetBlendFactorsSeparate(int glSrcRGB, int glDstRGB, int glSrcAlpha, int g
 // Module Functions Definition - OpenGL Debug
 //----------------------------------------------------------------------------------
 #if defined(RLGL_ENABLE_OPENGL_DEBUG_CONTEXT) && defined(GRAPHICS_API_OPENGL_43)
-static void GLAPIENTRY rlDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const void *userParam)
+ void GLAPIENTRY rlDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const void *userParam)
 {
     // Ignore non-significant error/warning codes (NVidia drivers)
     // NOTE: Here there are the details with a sample output:
@@ -2815,10 +2815,10 @@ rlRenderBatch rlLoadRenderBatch(int numBuffers, int bufferElements)
         glGenBuffers(1, &batch.vertexBuffer[i].vboId[4]);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batch.vertexBuffer[i].vboId[4]);
 #if defined(GRAPHICS_API_OPENGL_33)
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferElements*6*sizeof(int), batch.vertexBuffer[i].indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferElements*6*sizeof(int), batch.vertexBuffer[i].indices, GL__DRAW);
 #endif
 #if defined(GRAPHICS_API_OPENGL_ES2)
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferElements*6*sizeof(short), batch.vertexBuffer[i].indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferElements*6*sizeof(short), batch.vertexBuffer[i].indices, GL__DRAW);
 #endif
     }
 
@@ -3829,7 +3829,7 @@ unsigned int rlLoadVertexBuffer(const void *buffer, int size, bool dynamic)
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
     glGenBuffers(1, &id);
     glBindBuffer(GL_ARRAY_BUFFER, id);
-    glBufferData(GL_ARRAY_BUFFER, size, buffer, dynamic? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size, buffer, dynamic? GL_DYNAMIC_DRAW : GL__DRAW);
 #endif
 
     return id;
@@ -3843,7 +3843,7 @@ unsigned int rlLoadVertexBufferElement(const void *buffer, int size, bool dynami
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
     glGenBuffers(1, &id);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, buffer, dynamic? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, buffer, dynamic? GL_DYNAMIC_DRAW : GL__DRAW);
 #endif
 
     return id;
@@ -4709,7 +4709,7 @@ void rlLoadDrawQuad(void)
     // Gen and fill vertex buffer (VBO)
     glGenBuffers(1, &quadVBO);
     glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL__DRAW);
 
     // Bind vertex attributes (position, texcoords)
     glEnableVertexAttribArray(RL_DEFAULT_SHADER_ATTRIB_LOCATION_POSITION);
@@ -4782,7 +4782,7 @@ void rlLoadDrawCube(void)
     // Gen and fill vertex buffer (VBO)
     glGenBuffers(1, &cubeVBO);
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL__DRAW);
 
     // Bind vertex attributes (position, normals, texcoords)
     glBindVertexArray(cubeVAO);
@@ -4846,7 +4846,7 @@ const char *rlGetPixelFormatName(unsigned int format)
 // Load default shader (just vertex positioning and texture coloring)
 // NOTE: This shader program is used for internal buffers
 // NOTE: Loaded: RLGL.State.defaultShaderId, RLGL.State.defaultShaderLocs
-static void rlLoadShaderDefault(void)
+ void rlLoadShaderDefault(void)
 {
     RLGL.State.defaultShaderLocs = (int *)RL_CALLOC(RL_MAX_SHADER_LOCATIONS, sizeof(int));
 
@@ -4977,7 +4977,7 @@ static void rlLoadShaderDefault(void)
 
 // Unload default shader
 // NOTE: Unloads: RLGL.State.defaultShaderId, RLGL.State.defaultShaderLocs
-static void rlUnloadShaderDefault(void)
+ void rlUnloadShaderDefault(void)
 {
     glUseProgram(0);
 
@@ -4995,7 +4995,7 @@ static void rlUnloadShaderDefault(void)
 
 #if defined(RLGL_SHOW_GL_DETAILS_INFO)
 // Get compressed format official GL identifier name
-static const char *rlGetCompressedFormatName(int format)
+ const char *rlGetCompressedFormatName(int format)
 {
     switch (format)
     {
@@ -5073,7 +5073,7 @@ static const char *rlGetCompressedFormatName(int format)
 
 // Get pixel data size in bytes (image or texture)
 // NOTE: Size depends on pixel format
-static int rlGetPixelDataSize(int width, int height, int format)
+int rlGetPixelDataSize(int width, int height, int format)
 {
     int dataSize = 0;       // Size in bytes
     int bpp = 0;            // Bits per pixel
@@ -5124,7 +5124,7 @@ static int rlGetPixelDataSize(int width, int height, int format)
 // Auxiliar math functions
 
 // Get float array of matrix data
-static rl_float16 rlMatrixToFloatV(Matrix mat)
+ rl_float16 rlMatrixToFloatV(Matrix mat)
 {
     rl_float16 result = { 0 };
 
@@ -5149,7 +5149,7 @@ static rl_float16 rlMatrixToFloatV(Matrix mat)
 }
 
 // Get identity matrix
-static Matrix rlMatrixIdentity(void)
+ Matrix rlMatrixIdentity(void)
 {
     Matrix result = {
         1.0f, 0.0f, 0.0f, 0.0f,
@@ -5163,7 +5163,7 @@ static Matrix rlMatrixIdentity(void)
 
 // Get two matrix multiplication
 // NOTE: When multiplying matrices... the order matters!
-static Matrix rlMatrixMultiply(Matrix left, Matrix right)
+ Matrix rlMatrixMultiply(Matrix left, Matrix right)
 {
     Matrix result = { 0 };
 
@@ -5188,7 +5188,7 @@ static Matrix rlMatrixMultiply(Matrix left, Matrix right)
 }
 
 // Transposes provided matrix
-static Matrix rlMatrixTranspose(Matrix mat)
+ Matrix rlMatrixTranspose(Matrix mat)
 {
     Matrix result = { 0 };
 
@@ -5213,7 +5213,7 @@ static Matrix rlMatrixTranspose(Matrix mat)
 }
 
 // Invert provided matrix
-static Matrix rlMatrixInvert(Matrix mat)
+ Matrix rlMatrixInvert(Matrix mat)
 {
     Matrix result = { 0 };
 
