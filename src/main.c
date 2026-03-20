@@ -350,6 +350,17 @@ int luaopen_rayluab(lua_State *L){
 		{"StopSound", rll_StopSound},
 		{"PauseSound", rll_PauseSound},
 		{"ResumeSound", rll_ResumeSound},
+		{"IsSoundPlaying", rll_IsSoundPlaying},
+		{"SetSoundVolume", rll_SetSoundVolume},
+		{"SetSoundPitch", rll_SetSoundPitch},
+		{"SetSoundPan", rll_SetSoundPan},
+		{"SetSoundPan", rll_SetSoundPan},
+		{"WaveCrop", rll_WaveCrop},
+		{"WaveFormat", rll_WaveFormat},
+		{"LoadWaveSamples", rll_LoadWaveSamples},
+		{"UnloadWaveSamples", rll_UnloadWaveSamples},
+		{"WaveSamplesGet", rll_WaveSamplesGet},
+		{"WaveSamplesSet", rll_WaveSamplesSet},
 		{NULL, NULL},
 	};
 

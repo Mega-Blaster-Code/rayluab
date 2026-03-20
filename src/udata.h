@@ -15,6 +15,7 @@
 #define IMAGE_USERDATA 1
 #define WAVE_USERDATA 2
 #define SOUND_USERDATA 3
+#define FLOATARRAY_USERDATA 4
 
 typedef struct {
     int type;

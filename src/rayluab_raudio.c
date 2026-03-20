@@ -154,25 +154,91 @@ int rll_ResumeSound(lua_State *L){
 	return 0;
 }
 
-/*
 
-bool rll_IsSoundPlaying(Sound sound);
+int rll_IsSoundPlaying(lua_State *L){
+	Sound *s = rll_getuserdata_data(L, 1, SOUND_USERDATA);
+	int b = IsSoundPlaying(*s);
+	lua_pushboolean(L, b);
+	return 1;
+}
 
-int rll_SetSoundVolume(Sound sound, float volume);
+int rll_SetSoundVolume(lua_State *L){
+	Sound *s = rll_getuserdata_data(L, 1, SOUND_USERDATA);
+	float volume = (float)luaL_checknumber(L, 2);
+	SetSoundVolume(*s, volume);
+	return 0;
+}
 
-int rll_SetSoundPitch(Sound sound, float pitch);
+int rll_SetSoundPitch(lua_State *L){
+	Sound *s = rll_getuserdata_data(L, 1, SOUND_USERDATA);
+	float pitch = (float)luaL_checknumber(L, 2);
+	SetSoundPitch(*s, pitch);
+	return 0;
+}
 
-int rll_SetSoundPan(Sound sound, float pan);
+int rll_SetSoundPan(lua_State *L){
+	Sound *s = rll_getuserdata_data(L, 1, SOUND_USERDATA);
+	float pan = (float)luaL_checknumber(L, 2);
+	SetSoundPitch(*s, pan);
+	return 0;
+}
 
-Wave rll_WaveCopy(Wave wave);
+int rll_WaveCopy(lua_State *L){
+	Wave *w = rll_getuserdata_data(L, 1, WAVE_USERDATA);
+	Wave nw = WaveCopy(*w);
+	rll_newuserdata(L, WAVE_USERDATA, &nw, sizeof(nw));
+	return 1;
+}
 
-int rll_WaveCrop(Wave *wave, int initFrame, int finalFrame);
+int rll_WaveCrop(lua_State *L){
+	Wave *w = rll_getuserdata_data(L, 1, WAVE_USERDATA);
+	int initFrame = (int)luaL_checkinteger(L, 2);
+	int finalFrame = (int)luaL_checkinteger(L, 3);
+	WaveCrop(w, initFrame, finalFrame);
+	return 0;
+}
 
-int rll_WaveFormat(Wave *wave, int sampleRate, int sampleSize, int channels);
+int rll_WaveFormat(lua_State *L){
+	Wave *w = rll_getuserdata_data(L, 1, WAVE_USERDATA);
+	int sampleRate = (int)luaL_checkinteger(L, 2);
+	int sampleSize = (int)luaL_checkinteger(L, 3);
+	int channels = (int)luaL_checkinteger(L, 4);
+	WaveFormat(w, sampleRate, sampleSize, channels);
+	return 0;
+}
 
-float *rll_LoadWaveSamples(Wave wave);
+int rll_LoadWaveSamples(lua_State *L){
+    Wave *w = rll_getuserdata_data(L, 1, WAVE_USERDATA);
 
-int rll_UnloadWaveSamples(float *samples);
+    float *samples = LoadWaveSamples(*w);
+
+    rll_newuserdata(L, FLOATARRAY_USERDATA, samples, sizeof(float*));
+
+    return 1;
+}
+
+int rll_WaveSamplesGet(lua_State *L){
+	float *samples = rll_getuserdata_data(L, 1, FLOATARRAY_USERDATA);
+	lua_Integer index = luaL_checkinteger(L, 2);
+	lua_pushnumber(L, (lua_Number)samples[index]);
+	return 1;
+}
+
+int rll_WaveSamplesSet(lua_State *L){
+	float *samples = rll_getuserdata_data(L, 1, FLOATARRAY_USERDATA);
+	lua_Integer index = luaL_checkinteger(L, 2);
+	lua_Number value = luaL_checknumber(L, 3);
+	samples[index] = (float)value;
+	return 0;
+}
+
+int rll_UnloadWaveSamples(lua_State *L){
+    float *samples = rll_getuserdata_data(L, 1, FLOATARRAY_USERDATA);
+
+    UnloadWaveSamples(samples);
+
+    return 0;
+}
 
 Music rll_LoadMusicStream(const char *fileName);
 
@@ -206,6 +272,7 @@ float rll_GetMusicTimeLength(Music music);
 
 float rll_GetMusicTimePlayed(Music music);
 
+/*
 AudioStream rll_LoadAudioStream(unsigned int sampleRate, unsigned int sampleSize, unsigned int channels);
 
 bool rll_IsAudioStreamValid(AudioStream stream);

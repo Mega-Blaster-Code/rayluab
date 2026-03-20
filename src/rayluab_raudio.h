@@ -56,24 +56,29 @@ int rll_PauseSound(lua_State *L);
 
 int rll_ResumeSound(lua_State *L);
 
+int rll_IsSoundPlaying(lua_State *L);
+
+int rll_SetSoundVolume(lua_State *L);
+
+int rll_SetSoundPitch(lua_State *L);
+
+int rll_SetSoundPan(lua_State *L);
+
+int rll_WaveCopy(lua_State *L);
+
+int rll_WaveCrop(lua_State *L);
+
+int rll_WaveFormat(lua_State *L);
+
+int rll_LoadWaveSamples(lua_State *L);
+
+int rll_UnloadWaveSamples(lua_State *L);
+
+int rll_WaveSamplesGet(lua_State *L);
+
+int rll_WaveSamplesSet(lua_State *L);
+
 /*
-bool rll_IsSoundPlaying(Sound sound);
-
-int rll_SetSoundVolume(Sound sound, float volume);
-
-int rll_SetSoundPitch(Sound sound, float pitch);
-
-int rll_SetSoundPan(Sound sound, float pan);
-
-Wave rll_WaveCopy(Wave wave);
-
-int rll_WaveCrop(Wave *wave, int initFrame, int finalFrame);
-
-int rll_WaveFormat(Wave *wave, int sampleRate, int sampleSize, int channels);
-
-float *rll_LoadWaveSamples(Wave wave);
-
-int rll_UnloadWaveSamples(float *samples);
 
 Music rll_LoadMusicStream(const char *fileName);
 
